@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #0D0D1A;
+  --color-surface: #12102A;
+  --color-primary: #7C3AED;
+  --color-accent-blue: #3B82F6;
+  --color-accent-warm: #F97316;
+  --color-text: #F1F0FF;
+  --color-text-muted: #A89EC9;
+  --gradient-brand: linear-gradient(135deg, #7C3AED, #3B82F6, #F97316);
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, sans-serif;
+}
