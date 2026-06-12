@@ -13,7 +13,9 @@
     "noAccount": "¿No tienes cuenta? Regístrate",
     "haveAccount": "¿Ya tienes cuenta? Inicia sesión",
     "invalidCredentials": "Credenciales incorrectas",
-    "registrationError": "Error al registrarse"
+    "registrationError": "Error al registrarse",
+    "loginSuccess": "¡Sesión iniciada correctamente!",
+    "registerSuccess": "¡Cuenta creada correctamente!"
   },
   "collection": {
     "title": "Mi colección",

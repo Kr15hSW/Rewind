@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate, Navigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
 import { register as registerService } from '../services/authService'
@@ -15,8 +15,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-
-  if (isAuthenticated) return <Navigate to="/collection" replace />
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,6 +24,7 @@ export default function RegisterPage() {
     try {
       const { token } = await registerService({ email, username, password })
       login(token, false)
+      setSuccess(true)
       navigate('/collection')
     } catch {
       setError(t('auth.registrationError'))
@@ -118,6 +118,7 @@ export default function RegisterPage() {
               />
             </div>
 
+            {success && <p className="text-sm text-green-400">{t('auth.registerSuccess')}</p>}
             {error && <p className="text-sm text-red-400">{error}</p>}
 
             <button

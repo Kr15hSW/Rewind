@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate, Navigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
 import { login as loginService } from '../services/authService'
@@ -15,8 +15,7 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-
-  if (isAuthenticated) return <Navigate to="/collection" replace />
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,6 +24,7 @@ export default function LoginPage() {
     try {
       const { token } = await loginService({ email, password })
       login(token, rememberMe)
+      setSuccess(true)
       navigate('/collection')
     } catch {
       setError(t('auth.invalidCredentials'))
@@ -116,7 +116,8 @@ export default function LoginPage() {
                 {t('auth.rememberMe')}
               </label>
             </div>
-
+            
+            {success && <p className="text-sm text-green-400">{t('auth.loginSuccess')}</p>}
             {error && <p className="text-sm text-red-400">{error}</p>}
 
             <button

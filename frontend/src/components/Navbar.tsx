@@ -1,9 +1,17 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from '../context/AuthContext'
 import LanguageToggle from './LanguageToggle'
 
 export default function Navbar() {
   const { t } = useTranslation()
+  const { logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   return (
     <nav
@@ -36,12 +44,14 @@ export default function Navbar() {
 
       <div className="flex items-center gap-4">
         <LanguageToggle />
-        <div
-          className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-sm font-bold"
+        <button
+          onClick={handleLogout}
+          title="Cerrar sesión"
+          className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-sm font-bold transition-opacity duration-200 hover:opacity-80"
           style={{ backgroundImage: 'var(--gradient-brand)', color: 'var(--color-text)' }}
         >
           U
-        </div>
+        </button>
       </div>
 
       <div
