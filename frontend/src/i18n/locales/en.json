@@ -1,0 +1,30 @@
+{
+  "nav": {
+    "collection": "Collection",
+    "explore": "Explore"
+  },
+  "auth": {
+    "login": "Log in",
+    "register": "Sign up",
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "noAccount": "Don't have an account? Sign up",
+    "haveAccount": "Already have an account? Log in",
+    "invalidCredentials": "Invalid credentials",
+    "registrationError": "Registration failed"
+  },
+  "collection": {
+    "title": "My collection",
+    "empty": "Your collection is empty"
+  },
+  "search": {
+    "title": "Explore",
+    "placeholder": "Search movies, series, games or books..."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong"
+  }
+}

@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next'
+
 export default function SearchPage() {
-  return <h1>Search</h1>
+  const { t } = useTranslation()
+  return <h1>{t('search.title')}</h1>
 }

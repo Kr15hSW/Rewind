@@ -1,0 +1,30 @@
+{
+  "nav": {
+    "collection": "Colección",
+    "explore": "Explorar"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "email": "Correo electrónico",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "rememberMe": "Recuérdame",
+    "noAccount": "¿No tienes cuenta? Regístrate",
+    "haveAccount": "¿Ya tienes cuenta? Inicia sesión",
+    "invalidCredentials": "Credenciales incorrectas",
+    "registrationError": "Error al registrarse"
+  },
+  "collection": {
+    "title": "Mi colección",
+    "empty": "Tu colección está vacía"
+  },
+  "search": {
+    "title": "Explorar",
+    "placeholder": "Buscar películas, series, juegos o libros..."
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error"
+  }
+}

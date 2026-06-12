@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next'
+
 export default function CollectionPage() {
-  return <h1>Collection</h1>
+  const { t } = useTranslation()
+  return <h1>{t('collection.title')}</h1>
 }
