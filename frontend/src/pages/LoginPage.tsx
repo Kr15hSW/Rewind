@@ -7,7 +7,7 @@ import LanguageToggle from '../components/LanguageToggle'
 
 export default function LoginPage() {
   const { t } = useTranslation()
-  const { login, isAuthenticated } = useAuth()
+  const { login } = useAuth()
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
