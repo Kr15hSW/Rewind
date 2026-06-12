@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RewindAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c9ef48c572cdbc48ce6def7ca4128f056e5ee2e2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d35b69a40c09db4c16e0475ad0918e5346606e58")]
 [assembly: System.Reflection.AssemblyProductAttribute("RewindAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RewindAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
