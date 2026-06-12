@@ -3,6 +3,7 @@ import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
 import { login as loginService } from '../services/authService'
+import LanguageToggle from '../components/LanguageToggle'
 
 export default function LoginPage() {
   const { t } = useTranslation()
@@ -34,9 +35,13 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4"
+      className="min-h-screen flex items-center justify-center px-4 relative"
       style={{ backgroundColor: 'var(--color-bg)' }}
     >
+      <div className="absolute top-4 right-4">
+        <LanguageToggle />
+      </div>
+
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1
