@@ -1,32 +1,90 @@
 {
   "nav": {
     "collection": "Collection",
-    "explore": "Explore"
+    "explore": "Explore",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Log out",
+    "soon": "soon"
   },
   "auth": {
-    "login": "Log in",
-    "register": "Sign up",
     "email": "Email",
-    "username": "Username",
     "password": "Password",
     "rememberMe": "Remember me",
-    "noAccount": "Don't have an account? Sign up",
-    "haveAccount": "Already have an account? Log in",
-    "invalidCredentials": "Invalid credentials",
-    "registrationError": "Registration failed",
-    "loginSuccess": "Logged in successfully!",
-    "registerSuccess": "Account created successfully!"
+    "login": "Log in",
+    "register": "Create account",
+    "loginTitle": "Welcome back",
+    "registerTitle": "Create your account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "registerHere": "Register here",
+    "loginHere": "Log in here",
+    "loginError": "Incorrect email or password",
+    "registerSuccess": "Account created! Now log in"
   },
   "collection": {
-    "title": "My collection",
-    "empty": "Your collection is empty"
+    "title": "My Collection",
+    "empty": "Your collection is empty. Go to Explore to add content.",
+    "loading": "Loading collection...",
+    "error": "Could not load the collection",
+    "filter": {
+      "all": "All",
+      "movies": "Movies",
+      "series": "Series",
+      "books": "Books",
+      "games": "Games"
+    },
+    "status": {
+      "Pending": "Pending",
+      "InProgress": "In Progress",
+      "Completed": "Completed",
+      "Dropped": "Dropped"
+    },
+    "score": "Score",
+    "review": "Review",
+    "removeConfirm": "Remove this item from your collection?",
+    "remove": "Remove",
+    "noFilterResults": "No items match the selected filters."
   },
   "search": {
     "title": "Explore",
-    "placeholder": "Search movies, series, games or books..."
+    "placeholder": "Search movies, series, books or games...",
+    "button": "Search",
+    "filter": {
+      "all": "All",
+      "movies": "Movies",
+      "series": "Series",
+      "books": "Books",
+      "games": "Games"
+    },
+    "noResults": "No results for «{{query}}»",
+    "searching": "Searching...",
+    "add": "Add",
+    "type": {
+      "Movie": "Movie",
+      "Series": "Series",
+      "Book": "Book",
+      "Game": "Game"
+    },
+    "addModal": {
+      "title": "Add to collection",
+      "status": "Status",
+      "score": "Score (optional, 1-10)",
+      "confirm": "Add",
+      "cancel": "Cancel",
+      "successMessage": "«{{title}}» added to your collection",
+      "alreadyAdded": "Already in your collection",
+      "errorMessage": "Could not add. Please try again."
+    }
   },
   "common": {
     "loading": "Loading...",
-    "error": "Something went wrong"
+    "error": "An error occurred",
+    "retry": "Retry",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "notScored": "Not scored"
   }
 }

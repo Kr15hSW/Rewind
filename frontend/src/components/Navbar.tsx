@@ -1,63 +1,179 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
 import LanguageToggle from './LanguageToggle'
 
 export default function Navbar() {
-  const { t } = useTranslation()
-  const { logout } = useAuth()
-  const navigate = useNavigate()
+  const { t }        = useTranslation()
+  const { logout }   = useAuth()
+  const navigate     = useNavigate()
+  const location     = useLocation()
+  const [open, setOpen] = useState(false)
+  const dropRef      = useRef<HTMLDivElement>(null)
+
+  // Cierra el dropdown al hacer clic fuera
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropRef.current && !dropRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
   const handleLogout = () => {
+    setOpen(false)
     logout()
     navigate('/login')
   }
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-16"
-      style={{ backgroundColor: 'var(--color-surface)' }}
+      style={{
+        position: 'fixed', top: 0, left: 0, right: 0,
+        height: '64px',
+        display: 'flex', alignItems: 'center',
+        paddingInline: '24px',
+        zIndex: 100,
+        background: 'var(--color-surface)',
+        // Truco para el borde inferior con gradiente
+        borderBottom: '2px solid transparent',
+        backgroundImage:  'linear-gradient(var(--color-surface), var(--color-surface)), var(--gradient-brand)',
+        backgroundOrigin: 'border-box',
+        backgroundClip:   'padding-box, border-box',
+      } as React.CSSProperties}
     >
-      <Link to="/collection">
-        <span
-          className="text-xl font-bold bg-clip-text text-transparent"
-          style={{ backgroundImage: 'var(--gradient-brand)' }}
-        >
-          Rewind
-        </span>
+      {/* Logo */}
+      <Link
+        to="/collection"
+        style={{
+          fontSize: '1.4rem', fontWeight: 800,
+          background: 'var(--gradient-brand)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          textDecoration: 'none',
+          letterSpacing: '-0.02em',
+          flexShrink: 0,
+        }}
+      >
+        Rewind
       </Link>
 
-      <div className="flex items-center gap-8">
-        <Link
-          to="/collection"
-          className="text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
-        >
+      {/* Links centrados */}
+      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: '32px' }}>
+        <NavLink to="/collection" active={location.pathname === '/collection'}>
           {t('nav.collection')}
-        </Link>
-        <Link
-          to="/search"
-          className="text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors duration-200"
-        >
+        </NavLink>
+        <NavLink to="/search" active={location.pathname === '/search'}>
           {t('nav.explore')}
-        </Link>
+        </NavLink>
       </div>
 
-      <div className="flex items-center gap-4">
+      {/* Derecha */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
         <LanguageToggle />
-        <button
-          onClick={handleLogout}
-          title="Cerrar sesión"
-          className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer text-sm font-bold transition-opacity duration-200 hover:opacity-80"
-          style={{ backgroundImage: 'var(--gradient-brand)', color: 'var(--color-text)' }}
-        >
-          U
-        </button>
-      </div>
 
-      <div
-        className="absolute bottom-0 left-0 right-0 h-[2px]"
-        style={{ backgroundImage: 'var(--gradient-brand)' }}
-      />
+        {/* Avatar + dropdown */}
+        <div ref={dropRef} style={{ position: 'relative' }}>
+          <button
+            onClick={() => setOpen(p => !p)}
+            style={{
+              width: '36px', height: '36px',
+              borderRadius: '50%',
+              background: 'var(--gradient-brand)',
+              border: 'none', cursor: 'pointer',
+              color: 'white', fontWeight: 700, fontSize: '0.85rem',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            R
+          </button>
+
+          {open && (
+            <div style={{
+              position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+              background: 'var(--color-surface)',
+              border: '1px solid rgba(124,58,237,0.3)',
+              borderRadius: '12px',
+              padding: '6px',
+              minWidth: '164px',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.45)',
+              zIndex: 200,
+            }}>
+              <DropdownItem icon="👤" label={t('nav.profile')}  disabled />
+              <DropdownItem icon="⚙️" label={t('nav.settings')} disabled />
+              <div style={{ height: '1px', background: 'rgba(124,58,237,0.18)', margin: '4px 0' }} />
+              <DropdownItem icon="🚪" label={t('nav.logout')} danger onClick={handleLogout} />
+            </div>
+          )}
+        </div>
+      </div>
     </nav>
+  )
+}
+
+// Componentes internos
+
+function NavLink({ to, active, children }: { to: string; active: boolean; children: React.ReactNode }) {
+  return (
+    <Link
+      to={to}
+      style={{
+        color: active ? 'var(--color-text)' : 'var(--color-text-muted)',
+        textDecoration: 'none',
+        fontSize: '0.9rem',
+        fontWeight: active ? 600 : 400,
+        paddingBottom: '2px',
+        borderBottom: active ? '2px solid var(--color-primary)' : '2px solid transparent',
+        transition: 'color 0.2s',
+      }}
+    >
+      {children}
+    </Link>
+  )
+}
+
+function DropdownItem({
+  icon, label, onClick, disabled, danger,
+}: {
+  icon:      string
+  label:     string
+  onClick?:  () => void
+  disabled?: boolean
+  danger?:   boolean
+}) {
+  const { t } = useTranslation()
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        width: '100%',
+        display: 'flex', alignItems: 'center', gap: '10px',
+        padding: '9px 12px',
+        background: hovered && !disabled ? 'rgba(124,58,237,0.13)' : 'none',
+        border: 'none', borderRadius: '8px',
+        cursor: disabled ? 'default' : 'pointer',
+        color:  disabled ? 'var(--color-text-muted)' : danger ? '#F87171' : 'var(--color-text)',
+        fontSize: '0.875rem',
+        opacity: disabled ? 0.55 : 1,
+        textAlign: 'left',
+        transition: 'background 0.15s',
+      }}
+    >
+      <span>{icon}</span>
+      <span style={{ flex: 1 }}>{label}</span>
+      {disabled && (
+        <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)' }}>
+          {t('nav.soon')}
+        </span>
+      )}
+    </button>
   )
 }
