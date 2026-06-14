@@ -45,11 +45,20 @@ public class MediaController : ControllerBase
             return BadRequest(new { message = "Tipo inválido. Usa: movie, series, book, game" });
 
         if (request.ExternalId is not null)
-        {
-            var exists = await _db.MediaItems.AnyAsync(m =>
-                m.ExternalId == request.ExternalId && m.Type == mediaType);
-            if (exists)
-                return Conflict(new { message = "Este contenido ya existe en el catálogo" });
+        {   
+            // if the item exists in the global catalogue, return it as is
+            // (200 OK). This way different users can add the same content to
+            // their collections without the catalogue trying to duplicate
+            var existing = await _db.MediaItems
+                .Include(m => m.MovieDetails)
+                .Include(m => m.SeriesDetails)
+                .Include(m => m.BookDetails)
+                .Include(m => m.GameDetails)
+                .FirstOrDefaultAsync(m =>
+                    m.ExternalId == request.ExternalId && m.Type == mediaType);
+
+            if (existing is not null)
+                return Ok(MediaMapper.ToResponse(existing));
         }
 
         var item = new MediaItem
