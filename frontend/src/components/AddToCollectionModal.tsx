@@ -47,6 +47,7 @@ export default function AddToCollectionModal({ result, onClose, onSuccess }: Pro
       onSuccess(t('search.addModal.successMessage', { title: result.title }))
       onClose()
     } catch (err) {
+      console.error('Error al añadir a la colección:', err)
       if (err instanceof Error && err.message === 'already_in_collection') {
         setError(t('search.addModal.alreadyAdded'))
       } else {

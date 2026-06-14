@@ -1,7 +1,10 @@
 import type { CollectionStatus, MediaType } from '../types'
 
-// Normalizes to the format the frontend expects:
-// "Pending", "InProgress", "Completed", "Dropped"
+
+function normalizeKey(value: string): string {
+  return value.toLowerCase().replace(/[^a-z]/g, '')
+}
+
 const STATUS_MAP: Record<string, CollectionStatus> = {
   pending: 'Pending',
   inprogress: 'InProgress',
@@ -17,9 +20,21 @@ const MEDIA_TYPE_MAP: Record<string, MediaType> = {
 }
 
 export function normalizeStatus(status: string): CollectionStatus {
-  return STATUS_MAP[status.toLowerCase()] ?? (status as CollectionStatus)
+  return STATUS_MAP[normalizeKey(status)] ?? (status as CollectionStatus)
 }
 
 export function normalizeMediaType(type: string): MediaType {
-  return MEDIA_TYPE_MAP[type.toLowerCase()] ?? (type as MediaType)
+  return MEDIA_TYPE_MAP[normalizeKey(type)] ?? (type as MediaType)
+}
+
+
+const STATUS_TO_BACKEND: Record<CollectionStatus, string> = {
+  Pending: 'pending',
+  InProgress: 'in_progress',
+  Completed: 'completed',
+  Dropped: 'dropped',
+}
+
+export function toBackendStatus(status: CollectionStatus): string {
+  return STATUS_TO_BACKEND[status]
 }
