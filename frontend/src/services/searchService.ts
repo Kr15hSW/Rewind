@@ -55,12 +55,16 @@ export async function searchGames(query: string): Promise<SearchResult[]> {
     year: item.released ? Number(item.released.split('-')[0]) : null,
     description: null,
     genres: (item.genres ?? []).map((g: AnyObj) => g.name),
+    // RAWG incluye las plataformas directamente en la búsqueda
+    platforms: (item.platforms ?? [])
+      .map((p: AnyObj) => p.platform?.name)
+      .filter((name: unknown): name is string => Boolean(name)),
   }))
 }
 
 export async function searchBooks(query: string): Promise<SearchResult[]> {
   const res = await fetch(
-    `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=12&fields=key,title,cover_i,first_publish_year,author_name,subject`,
+    `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=12&fields=key,title,cover_i,first_publish_year,author_name,subject,isbn`,
   )
   if (!res.ok) return []
   const data = await res.json()
@@ -74,10 +78,12 @@ export async function searchBooks(query: string): Promise<SearchResult[]> {
     year: item.first_publish_year ?? null,
     description: item.author_name ? `de ${item.author_name[0]}` : null,
     genres: (item.subject ?? []).slice(0, 3),
+    author: item.author_name?.[0] ?? null,
+    isbn: item.isbn?.[0] ?? null,
   }))
 }
 
-// Call all 4 services parallely and combine the results
+// Call all 4 services parallely and combine results
 export async function searchAll(query: string): Promise<SearchResult[]> {
   const results = await Promise.allSettled([
     searchMovies(query),

@@ -16,3 +16,13 @@ body {
   color: var(--color-text);
   font-family: system-ui, sans-serif;
 }
+
+/* Esqueleto de carga (SearchPage): pulso suave de opacidad */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.skeleton-pulse {
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}

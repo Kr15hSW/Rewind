@@ -28,15 +28,18 @@ export default function AddToCollectionModal({ result, onClose, onSuccess }: Pro
     setLoading(true)
     setError(null)
     try {
-      // Crea el ítem en la base de datos
+      // Crea el ítem en la base de datos (o reutiliza el existente)
       const media = await createMediaItem({
         title:       result.title,
         type:        result.type,
-        description: result.description  ?? undefined,
-        coverUrl:    result.coverUrl     ?? undefined,
-        releaseYear:        result.year         ?? undefined,
+        description: result.description ?? undefined,
+        coverUrl:    result.coverUrl    ?? undefined,
+        releaseYear: result.year        ?? undefined,
         genres:      result.genres,
         externalId:  result.externalId,
+        platforms:   result.platforms,
+        author:      result.author ?? undefined,
+        isbn:        result.isbn   ?? undefined,
       })
       // Lo añade a la colección del usuario
       await addToCollection({

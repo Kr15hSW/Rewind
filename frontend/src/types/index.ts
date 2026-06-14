@@ -50,6 +50,11 @@ export interface CreateMediaItemRequest {
   releaseYear?: number
   genres?: string[]
   externalId?: string
+
+  // Only for Game (platforms) and Book (author, ISBN) -- for now
+  platforms?: string[]
+  author?: string
+  isbn?: string
 }
 
 // Body for POST /api/collection
@@ -78,4 +83,9 @@ export interface SearchResult {
   year: number | null
   description: string | null
   genres: string[]
+
+  // Only present for Game (platforms) and Book (author, ISBN) -- for now
+  platforms?: string[]
+  author?: string | null
+  isbn?: string | null
 }

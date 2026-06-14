@@ -1,15 +1,16 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import type { CollectionEntryResponse, CollectionStatus } from '../types'
+import type { CollectionEntryResponse, CollectionStatus, MediaType } from '../types'
 import { getCollection, deleteFromCollection } from '../services/mediaService'
 import { normalizeStatus, normalizeMediaType } from '../utils/status'
+import { getTypeTooltip, getScoreTooltip } from '../utils/scoreTooltip'
 import MediaCard from '../components/MediaCard'
 import FilterBar, { type TypeFilter, type StatusFilter } from '../components/FilterBar'
 import EditCollectionEntryModal from '../components/EditCollectionEntryModal'
 
 export default function CollectionPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [entries,      setEntries]      = useState<CollectionEntryResponse[]>([])
   const [loading,      setLoading]      = useState(true)
   const [error,        setError]        = useState<string | null>(null)
@@ -69,18 +70,27 @@ export default function CollectionPage() {
     return true
   })
 
-  // Estadísticas rápidas
-  const scores   = entries.map(e => e.score).filter((s): s is number => s !== null)
-  const avgScore = scores.length
-    ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1)
-    : null
+  // Idioma actual ("es" o "en") para elegir los textos de los tooltips.
+  // resolvedLanguage tiene en cuenta el fallback configurado (español).
+  const lang = (i18n.resolvedLanguage ?? i18n.language).startsWith('es') ? 'es' : 'en'
 
+  // Totales por tipo — SIEMPRE sobre toda la colección, sin filtrar.
+  // Los iconos 🎬📺📚🎮 muestran "cuánto tienes en total de cada tipo".
   const typeCounts = {
     Movie:  entries.filter(e => e.mediaItem.type === 'Movie').length,
     Series: entries.filter(e => e.mediaItem.type === 'Series').length,
     Book:   entries.filter(e => e.mediaItem.type === 'Book').length,
     Game:   entries.filter(e => e.mediaItem.type === 'Game').length,
   }
+
+  // Puntuación media — sobre lo que se está mostrando AHORA (filtered),
+  // así que cambia con los filtros. "–" si nada de lo mostrado tiene puntuación.
+  const visibleScores = filtered.map(e => e.score).filter((s): s is number => s !== null)
+  const hasScore = visibleScores.length > 0
+  const avgLabel = hasScore
+    ? `${(visibleScores.reduce((a, b) => a + b, 0) / visibleScores.length).toFixed(1)}/10`
+    : '–'
+  const scoreTooltip = getScoreTooltip(typeFilter, statusFilter, hasScore, lang)
 
   return (
     <div style={{ padding: '32px 24px', maxWidth: '1400px', margin: '0 auto' }}>
@@ -106,17 +116,22 @@ export default function CollectionPage() {
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '28px' }}>
           {(
             [
-              { emoji: '🎬', value: typeCounts.Movie  },
-              { emoji: '📺', value: typeCounts.Series },
-              { emoji: '📚', value: typeCounts.Book   },
-              { emoji: '🎮', value: typeCounts.Game   },
-            ] as { emoji: string; value: number }[]
+              { type: 'Movie',  emoji: '🎬', value: typeCounts.Movie  },
+              { type: 'Series', emoji: '📺', value: typeCounts.Series },
+              { type: 'Book',   emoji: '📚', value: typeCounts.Book   },
+              { type: 'Game',   emoji: '🎮', value: typeCounts.Game   },
+            ] as { type: MediaType; emoji: string; value: number }[]
           )
             .filter(s => s.value > 0)
-            .map((s, i) => (
-              <Stat key={i} emoji={s.emoji} label={String(s.value)} />
+            .map(s => (
+              <Stat
+                key={s.type}
+                emoji={s.emoji}
+                label={String(s.value)}
+                title={getTypeTooltip(s.type, lang)}
+              />
             ))}
-          {avgScore && <Stat emoji="⭐" label={`${avgScore}/10`} />}
+          <Stat emoji="⭐" label={avgLabel} title={scoreTooltip} />
         </div>
       )}
 
@@ -202,16 +217,19 @@ export default function CollectionPage() {
   )
 }
 
-function Stat({ emoji, label }: { emoji: string; label: string }) {
+function Stat({ emoji, label, title }: { emoji: string; label: string; title?: string }) {
   return (
-    <div style={{
-      background: 'var(--color-surface)',
-      border: '1px solid rgba(124,58,237,0.2)',
-      borderRadius: '10px',
-      padding: '8px 16px',
-      display: 'flex', alignItems: 'center', gap: '8px',
-      fontSize: '0.88rem',
-    }}>
+    <div
+      title={title}
+      style={{
+        background: 'var(--color-surface)',
+        border: '1px solid rgba(124,58,237,0.2)',
+        borderRadius: '10px',
+        padding: '8px 16px',
+        display: 'flex', alignItems: 'center', gap: '8px',
+        fontSize: '0.88rem',
+      }}
+    >
       <span>{emoji}</span>
       <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>{label}</span>
     </div>

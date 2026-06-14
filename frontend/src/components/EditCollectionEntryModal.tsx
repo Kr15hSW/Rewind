@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { CollectionEntryResponse, CollectionStatus } from '../types'
+import type { CollectionEntryResponse, CollectionStatus, MediaItemResponse } from '../types'
 import { updateCollectionEntry } from '../services/mediaService'
 
 interface Props {
@@ -16,12 +16,33 @@ const TYPE_EMOJI: Record<string, string> = {
   Movie: '🎬', Series: '📺', Book: '📚', Game: '🎮',
 }
 
+function getDetailLines(mediaItem: MediaItemResponse): string[] {
+  const lines: string[] = []
+
+  switch (mediaItem.type) {
+    case 'Game':
+      if (mediaItem.releaseYear) lines.push(String(mediaItem.releaseYear))
+      if (mediaItem.platforms && mediaItem.platforms.length > 0) {
+        lines.push(mediaItem.platforms.join(' · '))
+      }
+      break
+
+    case 'Book':
+      if (mediaItem.author) lines.push(mediaItem.author)
+      if (mediaItem.releaseYear) lines.push(String(mediaItem.releaseYear))
+      if (mediaItem.isbn) lines.push(`ISBN ${mediaItem.isbn}`)
+      break
+
+    default:
+      if (mediaItem.releaseYear) lines.push(String(mediaItem.releaseYear))
+  }
+
+  return lines
+}
+
 export default function EditCollectionEntryModal({ entry, onClose, onSuccess, onUpdated }: Props) {
   if (!entry) return null
 
-  // The key forces React to create a new instance of the form every time
-  // there is an entry change, so that every field always starts with the
-  // right value, without using useEffect
   return (
     <EditForm
       key={entry.id}
@@ -115,11 +136,11 @@ function EditForm({ entry, onClose, onSuccess, onUpdated }: { entry: CollectionE
             <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', lineHeight: 1.3 }}>
               {mediaItem.title}
             </p>
-            {mediaItem.releaseYear && (
-              <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.82rem' }}>
-                {mediaItem.releaseYear}
+            {getDetailLines(mediaItem).map((line, i) => (
+              <p key={i} style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.82rem' }}>
+                {line}
               </p>
-            )}
+            ))}
           </div>
         </div>
 

@@ -141,12 +141,18 @@ export default function SearchPage() {
         </div>
       )}
 
-      {/* Estados */}
+      {/* Esqueleto de carga */}
       {loading && (
-        <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: '40px 0' }}>
-          {t('search.searching')}
-        </p>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(148px, 1fr))',
+          gap: '18px',
+        }}>
+          {Array.from({ length: 10 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
       )}
+
+      {/* Sin resultados */}
       {!loading && searched && results.length === 0 && (
         <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: '40px 0' }}>
           {t('search.noResults', { query: lastQuery })}
@@ -175,7 +181,31 @@ export default function SearchPage() {
   )
 }
 
-// Tarjeta de resultado de búsqueda
+// Placeholder card while results are being fetched
+
+function SkeletonCard() {
+  return (
+    <div>
+      <div className="skeleton-pulse" style={{
+        aspectRatio: '2/3',
+        borderRadius: '10px',
+        background: 'rgba(124,58,237,0.12)',
+      }} />
+      <div style={{ padding: '10px 4px 0' }}>
+        <div className="skeleton-pulse" style={{
+          height: '12px', width: '85%', borderRadius: '4px',
+          background: 'rgba(124,58,237,0.12)', marginBottom: '6px',
+        }} />
+        <div className="skeleton-pulse" style={{
+          height: '10px', width: '45%', borderRadius: '4px',
+          background: 'rgba(124,58,237,0.1)',
+        }} />
+      </div>
+    </div>
+  )
+}
+
+// Resulting card from search/fetch
 
 const EMOJI: Record<string, string> = { Movie: '🎬', Series: '📺', Book: '📚', Game: '🎮' }
 
