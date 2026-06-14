@@ -5,7 +5,7 @@ import type { CollectionEntryResponse } from '../types'
 import { getCollection, deleteFromCollection } from '../services/mediaService'
 import MediaCard from '../components/MediaCard'
 import FilterBar, { type TypeFilter, type StatusFilter } from '../components/FilterBar'
-import { normalizeStatus } from '../utils/status'
+import { normalizeStatus, normalizeMediaType } from '../utils/status'
 
 export default function CollectionPage() {
   const { t } = useTranslation()
@@ -20,7 +20,11 @@ export default function CollectionPage() {
     setError(null)
     try {
       const data = await getCollection()
-      setEntries(data.map(e => ({ ...e, status: normalizeStatus(e.status) })))
+      setEntries(data.map(e => ({ 
+        ...e,
+        status: normalizeStatus(e.status),
+        mediaItem: { ...e.mediaItem, type: normalizeMediaType(e.mediaItem.type) },
+      })))
     } catch {
       setError(t('collection.error'))
     } finally {
