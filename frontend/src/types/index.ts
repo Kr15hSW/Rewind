@@ -10,21 +10,34 @@ export interface MediaItemResponse {
   type: MediaType
   description: string | null
   coverUrl: string | null
-  year: number | null
+  releaseYear: number | null
   genres: string[]
   externalId: string | null
+
+  // Specific fields for types, null or not according to mediaType
+  director?: string | null
+  durationMinutes?: number | null
+  originalLanguage?: string | null
+  creator?: string | null
+  totalSeasons?: number | null
+  totalEpisodes?: number | null
+  seriesStatus?: string | null
+  author?: string | null
+  publisher?: string | null
+  pages?: number | null
+  isbn?: string | null
+  developer?: string | null
+  platforms?: string[]
 }
 
 // GET /api/collection (array)
 export interface CollectionEntryResponse {
   id: string
-  userId: string
-  mediaItemId: string
   status: CollectionStatus
   score: number | null
   review: string | null
-  startedAt: string | null
-  finishedAt: string | null
+  platformPlayed: string | null
+  addedAt: string
   mediaItem: MediaItemResponse
 }
 
@@ -52,8 +65,7 @@ export interface UpdateCollectionEntryRequest {
   status?: CollectionStatus
   score?: number
   review?: string
-  startedAt?: string
-  finishedAt?: string
+  platformPlayed?: string
 }
 
 // Result of searching in TMDB / RAWG / Open Library

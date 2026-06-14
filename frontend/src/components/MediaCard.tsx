@@ -38,61 +38,60 @@ export default function MediaCard({ entry, onDelete }: Props) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => { setHovered(false); setMenuOpen(false) }}
     >
-      {/* Glow
-          Si hay portada: copia desenfocada de la misma imagen.
-          Si no hay portada: resplandor morado de marca. */}
-      {mediaItem.coverUrl ? (
-        <img
-          src={mediaItem.coverUrl}
-          aria-hidden
-          style={{
+      {/* ── Contenedor de la portada ─────────────────────────────────
+          El glow está anclado SOLO a este contenedor (no a toda la
+          tarjeta), por eso ya no se estira hacia abajo. */}
+      <div style={{
+        position: 'relative',
+        aspectRatio: '2/3',
+        borderRadius: '10px',
+      }}>
+
+        {/* Glow — halo fino y uniforme alrededor de la portada */}
+        {mediaItem.coverUrl ? (
+          <img
+            src={mediaItem.coverUrl}
+            aria-hidden
+            style={{
+              position: 'absolute',
+              inset: '-6px',
+              width: 'calc(100% + 12px)',
+              height: 'calc(100% + 12px)',
+              objectFit: 'cover',
+              filter: 'blur(14px)',
+              borderRadius: '14px',
+              opacity: hovered ? 0.45 : 0,
+              transition: 'opacity 0.35s ease',
+              pointerEvents: 'none',
+              zIndex: 0,
+            }}
+          />
+        ) : (
+          <div style={{
             position: 'absolute',
-            inset: '-14px',
-            width: 'calc(100% + 28px)',
-            height: 'calc(100% + 28px)',
-            objectFit: 'cover',
-            filter: 'blur(22px)',
-            borderRadius: '22px',
-            transform: 'scale(1.05)',
-            opacity: hovered ? 0.65 : 0,
+            inset: '-6px',
+            borderRadius: '14px',
+            background: 'rgba(124,58,237,0.6)',
+            filter: 'blur(14px)',
+            opacity: hovered ? 0.45 : 0,
             transition: 'opacity 0.35s ease',
             pointerEvents: 'none',
             zIndex: 0,
-          }}
-        />
-      ) : (
-        <div style={{
-          position: 'absolute',
-          inset: '-12px',
-          borderRadius: '22px',
-          background: 'rgba(124,58,237,0.6)',
-          filter: 'blur(22px)',
-          opacity: hovered ? 0.6 : 0,
-          transition: 'opacity 0.35s ease',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }} />
-      )}
+          }} />
+        )}
 
-      {/* Tarjeta */}
-      <div style={{
-        position: 'relative',
-        zIndex: 1,
-        background: 'var(--color-surface)',
-        borderRadius: '10px',
-        overflow: 'hidden',
-        border: '1px solid',
-        borderColor: hovered ? 'rgba(124,58,237,0.45)' : 'rgba(124,58,237,0.15)',
-        transform: hovered ? 'translateY(-4px)' : 'none',
-        transition: 'transform 0.25s ease, border-color 0.25s ease',
-      }}>
-
-        {/* Portada */}
+        {/* Portada (recortada, encima del glow) */}
         <div style={{
           position: 'relative',
-          aspectRatio: '2/3',
+          width: '100%', height: '100%',
           overflow: 'hidden',
+          borderRadius: '10px',
           background: 'rgba(124,58,237,0.07)',
+          border: '1px solid',
+          borderColor: hovered ? 'rgba(124,58,237,0.45)' : 'rgba(124,58,237,0.15)',
+          transform: hovered ? 'translateY(-4px)' : 'none',
+          transition: 'transform 0.25s ease, border-color 0.25s ease',
+          zIndex: 1,
         }}>
           {mediaItem.coverUrl ? (
             <img
@@ -170,40 +169,40 @@ export default function MediaCard({ entry, onDelete }: Props) {
             </div>
           )}
         </div>
+      </div>
 
-        {/* Info */}
-        <div style={{ padding: '10px 10px 12px' }}>
-          <div style={{
-            display: 'inline-block',
-            padding: '2px 7px', borderRadius: '4px',
-            fontSize: '0.68rem', fontWeight: 600,
-            marginBottom: '6px',
-            background: STATUS_BG[status]    ?? 'rgba(124,58,237,0.15)',
-            color:      STATUS_COLOR[status] ?? 'var(--color-text-muted)',
-            textTransform: 'uppercase', letterSpacing: '0.05em',
-          }}>
-            {t(`collection.status.${status}`)}
-          </div>
+      {/* Info — fuera del contenedor del glow, no se ve afectada */}
+      <div style={{ padding: '10px 4px 0' }}>
+        <div style={{
+          display: 'inline-block',
+          padding: '2px 7px', borderRadius: '4px',
+          fontSize: '0.68rem', fontWeight: 600,
+          marginBottom: '6px',
+          background: STATUS_BG[status]    ?? 'rgba(124,58,237,0.15)',
+          color:      STATUS_COLOR[status] ?? 'var(--color-text-muted)',
+          textTransform: 'uppercase', letterSpacing: '0.05em',
+        }}>
+          {t(`collection.status.${status}`)}
+        </div>
 
-          <p style={{
-            margin: 0,
-            color: 'var(--color-text)', fontWeight: 600,
-            fontSize: '0.875rem', lineHeight: 1.3,
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-          } as React.CSSProperties}>
-            {mediaItem.title}
-          </p>
+        <p style={{
+          margin: 0,
+          color: 'var(--color-text)', fontWeight: 600,
+          fontSize: '0.875rem', lineHeight: 1.3,
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+        } as React.CSSProperties}>
+          {mediaItem.title}
+        </p>
 
-          {mediaItem.year && (
+          {mediaItem.releaseYear && (
             <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.76rem' }}>
-              {mediaItem.year} · {TYPE_EMOJI[mediaItem.type]}
+              {mediaItem.releaseYear} · {TYPE_EMOJI[mediaItem.type]}
             </p>
           )}
         </div>
       </div>
-    </div>
   )
 }
