@@ -23,9 +23,10 @@ const STATUS_COLOR: Record<string, string> = {
 interface Props {
   entry:    CollectionEntryResponse
   onDelete: (id: string) => void
+  onEdit:   (entry: CollectionEntryResponse) => void
 }
 
-export default function MediaCard({ entry, onDelete }: Props) {
+export default function MediaCard({ entry, onDelete, onEdit }: Props) {
   const { t } = useTranslation()
   const [hovered,  setHovered]  = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -34,20 +35,19 @@ export default function MediaCard({ entry, onDelete }: Props) {
 
   return (
     <div
-      style={{ position: 'relative' }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => { setHovered(false); setMenuOpen(false) }}
     >
-      {/* ── Contenedor de la portada ─────────────────────────────────
+      {/* Contenedor de la portada
           El glow está anclado SOLO a este contenedor (no a toda la
-          tarjeta), por eso ya no se estira hacia abajo. */}
+          tarjeta) */}
       <div style={{
         position: 'relative',
         aspectRatio: '2/3',
         borderRadius: '10px',
       }}>
 
-        {/* Glow — halo fino y uniforme alrededor de la portada */}
+        {/* Glow - halo fino y uniforme alrededor de la portada */}
         {mediaItem.coverUrl ? (
           <img
             src={mediaItem.coverUrl}
@@ -80,19 +80,23 @@ export default function MediaCard({ entry, onDelete }: Props) {
           }} />
         )}
 
-        {/* Portada (recortada, encima del glow) */}
-        <div style={{
-          position: 'relative',
-          width: '100%', height: '100%',
-          overflow: 'hidden',
-          borderRadius: '10px',
-          background: 'rgba(124,58,237,0.07)',
-          border: '1px solid',
-          borderColor: hovered ? 'rgba(124,58,237,0.45)' : 'rgba(124,58,237,0.15)',
-          transform: hovered ? 'translateY(-4px)' : 'none',
-          transition: 'transform 0.25s ease, border-color 0.25s ease',
-          zIndex: 1,
-        }}>
+        {/* Portada (recortada, encima del glow) - clic para editar */}
+        <div
+          onClick={() => onEdit(entry)}
+          style={{
+            position: 'relative',
+            width: '100%', height: '100%',
+            overflow: 'hidden',
+            borderRadius: '10px',
+            background: 'rgba(124,58,237,0.07)',
+            border: '1px solid',
+            borderColor: hovered ? 'rgba(124,58,237,0.45)' : 'rgba(124,58,237,0.15)',
+            transform: hovered ? 'translateY(-4px)' : 'none',
+            transition: 'transform 0.25s ease, border-color 0.25s ease',
+            cursor: 'pointer',
+            zIndex: 1,
+          }}
+        >
           {mediaItem.coverUrl ? (
             <img
               src={mediaItem.coverUrl}
@@ -155,7 +159,7 @@ export default function MediaCard({ entry, onDelete }: Props) {
               minWidth: '120px',
             }}>
               <button
-                onClick={() => { onDelete(entry.id); setMenuOpen(false) }}
+                onClick={e => { e.stopPropagation(); onDelete(entry.id); setMenuOpen(false) }}
                 style={{
                   width: '100%', padding: '9px 14px',
                   background: 'none', border: 'none',
@@ -168,10 +172,26 @@ export default function MediaCard({ entry, onDelete }: Props) {
               </button>
             </div>
           )}
+
+          {/* Pista de "clic para editar" (puramente visual) */}
+          {hovered && (
+            <div style={{
+              position: 'absolute', bottom: 7, right: 7,
+              background: 'rgba(0,0,0,0.72)',
+              backdropFilter: 'blur(4px)',
+              borderRadius: '6px',
+              padding: '3px 7px',
+              fontSize: '0.8rem',
+              color: 'white',
+              pointerEvents: 'none',
+            }}>
+              ✎
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Info — fuera del contenedor del glow, no se ve afectada */}
+      {/* Info - fuera del contenedor del glow, no se ve afectada */}
       <div style={{ padding: '10px 4px 0' }}>
         <div style={{
           display: 'inline-block',
@@ -197,12 +217,12 @@ export default function MediaCard({ entry, onDelete }: Props) {
           {mediaItem.title}
         </p>
 
-          {mediaItem.releaseYear && (
-            <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.76rem' }}>
-              {mediaItem.releaseYear} · {TYPE_EMOJI[mediaItem.type]}
-            </p>
-          )}
-        </div>
+        {mediaItem.releaseYear && (
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.76rem' }}>
+            {mediaItem.releaseYear} · {TYPE_EMOJI[mediaItem.type]}
+          </p>
+        )}
       </div>
+    </div>
   )
 }

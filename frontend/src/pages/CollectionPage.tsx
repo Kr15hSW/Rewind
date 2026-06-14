@@ -1,11 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import type { CollectionEntryResponse } from '../types'
+import type { CollectionEntryResponse, CollectionStatus } from '../types'
 import { getCollection, deleteFromCollection } from '../services/mediaService'
+import { normalizeStatus, normalizeMediaType } from '../utils/status'
 import MediaCard from '../components/MediaCard'
 import FilterBar, { type TypeFilter, type StatusFilter } from '../components/FilterBar'
-import { normalizeStatus, normalizeMediaType } from '../utils/status'
+import EditCollectionEntryModal from '../components/EditCollectionEntryModal'
 
 export default function CollectionPage() {
   const { t } = useTranslation()
@@ -14,13 +15,15 @@ export default function CollectionPage() {
   const [error,        setError]        = useState<string | null>(null)
   const [typeFilter,   setTypeFilter]   = useState<TypeFilter>('All')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('All')
+  const [editingEntry, setEditingEntry] = useState<CollectionEntryResponse | null>(null)
+  const [toast,        setToast]        = useState<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
       const data = await getCollection()
-      setEntries(data.map(e => ({ 
+      setEntries(data.map(e => ({
         ...e,
         status: normalizeStatus(e.status),
         mediaItem: { ...e.mediaItem, type: normalizeMediaType(e.mediaItem.type) },
@@ -34,6 +37,11 @@ export default function CollectionPage() {
 
   useEffect(() => { load() }, [load])
 
+  const showToast = (msg: string) => {
+    setToast(msg)
+    setTimeout(() => setToast(null), 4000)
+  }
+
   const handleDelete = async (id: string) => {
     if (!confirm(t('collection.removeConfirm'))) return
     try {
@@ -42,6 +50,17 @@ export default function CollectionPage() {
     } catch {
       alert(t('common.error'))
     }
+  }
+
+  const handleUpdated = (
+    id: string,
+    status: CollectionStatus,
+    score: number | null,
+    review: string | null,
+  ) => {
+    setEntries(prev => prev.map(e =>
+      e.id === id ? { ...e, status, score, review } : e,
+    ))
   }
 
   const filtered = entries.filter(e => {
@@ -68,6 +87,19 @@ export default function CollectionPage() {
       <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '20px' }}>
         {t('collection.title')}
       </h1>
+
+      {/* Toast de éxito */}
+      {toast && (
+        <div style={{
+          background: 'rgba(34,197,94,0.12)',
+          border: '1px solid rgba(34,197,94,0.35)',
+          borderRadius: '8px', padding: '10px 16px',
+          marginBottom: '20px',
+          color: '#4ADE80', fontSize: '0.88rem',
+        }}>
+          ✓ {toast}
+        </div>
+      )}
 
       {/* Estadísticas */}
       {entries.length > 0 && (
@@ -148,12 +180,24 @@ export default function CollectionPage() {
               gap: '20px',
             }}>
               {filtered.map(entry => (
-                <MediaCard key={entry.id} entry={entry} onDelete={handleDelete} />
+                <MediaCard
+                  key={entry.id}
+                  entry={entry}
+                  onDelete={handleDelete}
+                  onEdit={setEditingEntry}
+                />
               ))}
             </div>
           )}
         </>
       )}
+
+      <EditCollectionEntryModal
+        entry={editingEntry}
+        onClose={() => setEditingEntry(null)}
+        onSuccess={showToast}
+        onUpdated={handleUpdated}
+      />
     </div>
   )
 }

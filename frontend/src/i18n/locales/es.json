@@ -44,7 +44,18 @@
     "review": "Reseña",
     "removeConfirm": "¿Eliminar este elemento de tu colección?",
     "remove": "Eliminar",
-    "noFilterResults": "Ningún elemento coincide con los filtros seleccionados."
+    "noFilterResults": "Ningún elemento coincide con los filtros seleccionados.",
+    "editModal": {
+      "title": "Editar",
+      "status": "Estado",
+      "score": "Puntuación (1-10)",
+      "review": "Reseña",
+      "reviewPlaceholder": "Escribe tu opinión (opcional)",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "successMessage": "Cambios guardados",
+      "errorMessage": "No se pudo guardar. Inténtalo de nuevo."
+    }
   },
   "search": {
     "title": "Explorar",

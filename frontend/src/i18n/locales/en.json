@@ -44,7 +44,18 @@
     "review": "Review",
     "removeConfirm": "Remove this item from your collection?",
     "remove": "Remove",
-    "noFilterResults": "No items match the selected filters."
+    "noFilterResults": "No items match the selected filters.",
+    "editModal": {
+      "title": "Edit",
+      "status": "Status",
+      "score": "Score (1-10)",
+      "review": "Review",
+      "reviewPlaceholder": "Write your thoughts (optional)",
+      "save": "Save",
+      "cancel": "Cancel",
+      "successMessage": "Changes saved",
+      "errorMessage": "Could not save. Please try again."
+    }
   },
   "search": {
     "title": "Explore",

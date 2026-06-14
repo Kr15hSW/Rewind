@@ -63,9 +63,9 @@ export interface AddToCollectionRequest {
 // Body for PUT /api/collection/{id}
 export interface UpdateCollectionEntryRequest {
   status?: CollectionStatus
-  score?: number
-  review?: string
-  platformPlayed?: string
+  score?: number | null
+  review?: string | null
+  platformPlayed?: string | null
 }
 
 // Result of searching in TMDB / RAWG / Open Library
