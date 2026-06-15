@@ -131,14 +131,14 @@ public class CollectionController : ControllerBase
             entry.Status = status;
         }
 
-        if (request.Score.HasValue)
-        {
-            if (request.Score < 1 || request.Score > 10)
-                return BadRequest(new { message = "La puntuación debe estar entre 1 y 10" });
-            entry.Score = request.Score;
-        }
+        // Validamos el rango solo si llega una puntuación.
+        if (request.Score.HasValue && (request.Score < 1 || request.Score > 10))
+            return BadRequest(new { message = "La puntuación debe estar entre 1 y 10" });
 
-        if (request.Review         is not null) entry.Review         = request.Review;
+        // To be able to persist a delete score or review from frontend
+        entry.Score  = request.Score;
+        entry.Review = request.Review;
+
         if (request.PlatformPlayed is not null) entry.PlatformPlayed = request.PlatformPlayed;
 
         entry.UpdatedAt = DateTimeOffset.UtcNow;
