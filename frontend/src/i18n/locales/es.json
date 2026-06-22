@@ -2,6 +2,7 @@
   "nav": {
     "collection": "Colección",
     "explore": "Explorar",
+    "recommendations": "Para ti",
     "profile": "Perfil",
     "settings": "Ajustes",
     "logout": "Cerrar sesión",
@@ -87,6 +88,14 @@
       "alreadyAdded": "Ya está en tu colección",
       "errorMessage": "No se pudo añadir. Inténtalo de nuevo."
     }
+  },
+  "recommendations": {
+    "title": "Recomendado para ti",
+    "loading": "Buscando recomendaciones...",
+    "error": "No se pudieron cargar las recomendaciones",
+    "emptyCollection": "Añade contenido a tu colección para recibir recomendaciones.",
+    "emptyNoScores": "Puntúa algunos elementos de tu colección para recibir recomendaciones personalizadas.",
+    "emptyNoResults": "No hemos encontrado recomendaciones que encajen con tus gustos en este momento."
   },
   "common": {
     "loading": "Cargando...",

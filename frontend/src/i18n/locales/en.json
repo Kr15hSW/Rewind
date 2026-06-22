@@ -2,6 +2,7 @@
   "nav": {
     "collection": "Collection",
     "explore": "Explore",
+    "recommendations": "For You",
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Log out",
@@ -87,6 +88,14 @@
       "alreadyAdded": "Already in your collection",
       "errorMessage": "Could not add. Please try again."
     }
+  },
+  "recommendations": {
+    "title": "Recommended for You",
+    "loading": "Finding recommendations...",
+    "error": "Could not load recommendations",
+    "emptyCollection": "Add content to your collection to get recommendations.",
+    "emptyNoScores": "Score some items in your collection to get personalized recommendations.",
+    "emptyNoResults": "We couldn't find recommendations matching your taste right now."
   },
   "common": {
     "loading": "Loading...",

@@ -9,6 +9,7 @@ from flask_cors import CORS
 
 from fetchers.open_library import search_books
 from fetchers.rawg import search_games
+from fetchers.recommendations import get_recommendations
 from fetchers.tmdb import search_movies, search_series
 
 load_dotenv()
@@ -16,12 +17,10 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:5173'])
 
-# Cache in memory
-# Key: "type:search_word" (case insensitive)
-# Value: (timestamp of save, results)
-CACHE_TTL_SECONDS = 600  # 10 minutos
+# --- Caché en memoria ---
+CACHE_TTL_SECONDS = 600
 _cache: dict[str, tuple[float, list[dict]]] = {}
-_cache_lock = threading.Lock()  # evita problemas si dos peticiones llegan a la vez
+_cache_lock = threading.Lock()
 
 FETCHERS = {
     'movie': search_movies,
@@ -32,9 +31,7 @@ FETCHERS = {
 
 
 def get_or_fetch(media_type: str, query: str) -> list[dict]:
-    """Devuelve resultados de caché si son recientes, o los busca y los guarda si no."""
     key = f"{media_type}:{query.lower()}"
-
     with _cache_lock:
         cached = _cache.get(key)
         if cached is not None:
@@ -42,13 +39,10 @@ def get_or_fetch(media_type: str, query: str) -> list[dict]:
             if time.time() - saved_at < CACHE_TTL_SECONDS:
                 print(f"[cache] HIT  -> {key}")
                 return results
-
     print(f"[cache] MISS -> {key}")
     results = FETCHERS[media_type](query)
-
     with _cache_lock:
         _cache[key] = (time.time(), results)
-
     return results
 
 
@@ -64,8 +58,6 @@ def search():
         return jsonify(get_or_fetch(media_type, query))
 
     if media_type == 'all':
-        # Call all 4 fetchers parallely and each will check their cache internally
-        # saving indexed results respecting the order movies->shows->games->book
         types_order = ['movie', 'series', 'game', 'book']
         ordered = [[] for _ in types_order]
         with ThreadPoolExecutor(max_workers=4) as executor:
@@ -83,6 +75,17 @@ def search():
         return jsonify(combined)
 
     return jsonify({'error': f'Tipo desconocido: {media_type}'}), 400
+
+
+@app.route('/api/recommendations', methods=['GET'])
+def recommendations():
+    auth_header = request.headers.get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return jsonify({'error': 'Token de autorización requerido'}), 401
+
+    token = auth_header.removeprefix('Bearer ')
+    data = get_recommendations(token)
+    return jsonify(data)
 
 
 if __name__ == '__main__':

@@ -12,7 +12,6 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const dropRef      = useRef<HTMLDivElement>(null)
 
-  // Cierra el dropdown al hacer clic fuera
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (dropRef.current && !dropRef.current.contains(e.target as Node)) {
@@ -38,7 +37,6 @@ export default function Navbar() {
         paddingInline: '24px',
         zIndex: 100,
         background: 'var(--color-surface)',
-        // Truco para el borde inferior con gradiente
         borderBottom: '2px solid transparent',
         backgroundImage:  'linear-gradient(var(--color-surface), var(--color-surface)), var(--gradient-brand)',
         backgroundOrigin: 'border-box',
@@ -69,13 +67,15 @@ export default function Navbar() {
         <NavLink to="/search" active={location.pathname === '/search'}>
           {t('nav.explore')}
         </NavLink>
+        <NavLink to="/recommendations" active={location.pathname === '/recommendations'}>
+          {t('nav.recommendations')}
+        </NavLink>
       </div>
 
       {/* Derecha */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
         <LanguageToggle />
 
-        {/* Avatar + dropdown */}
         <div ref={dropRef} style={{ position: 'relative' }}>
           <button
             onClick={() => setOpen(p => !p)}
@@ -113,8 +113,6 @@ export default function Navbar() {
     </nav>
   )
 }
-
-// Componentes internos
 
 function NavLink({ to, active, children }: { to: string; active: boolean; children: React.ReactNode }) {
   return (
