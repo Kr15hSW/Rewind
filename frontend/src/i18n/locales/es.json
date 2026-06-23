@@ -21,7 +21,9 @@
     "registerHere": "Regístrate aquí",
     "loginHere": "Inicia sesión aquí",
     "loginError": "Correo o contraseña incorrectos",
-    "registerSuccess": "¡Cuenta creada! Ahora inicia sesión"
+    "registerSuccess": "¡Cuenta creada! Ahora inicia sesión",
+    "username": "Usuario",
+    "registrationError": "No se pudo crear la cuenta. Inténtalo de nuevo."
   },
   "collection": {
     "title": "Mi colección",

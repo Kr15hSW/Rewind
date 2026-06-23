@@ -21,7 +21,9 @@
     "registerHere": "Register here",
     "loginHere": "Log in here",
     "loginError": "Incorrect email or password",
-    "registerSuccess": "Account created! Now log in"
+    "registerSuccess": "Account created! Now log in",
+    "username": "Username",
+    "registrationError": "Could not create account. Please try again."
   },
   "collection": {
     "title": "My Collection",
