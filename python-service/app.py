@@ -17,8 +17,9 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:5173'])
 
-# --- Caché en memoria ---
-CACHE_TTL_SECONDS = 600
+# Caché en memoria
+CACHE_TTL_SECONDS              = 600   # búsquedas: 10 min
+RECOMMENDATIONS_TTL_SECONDS    = 300   # recomendaciones: 5 min
 _cache: dict[str, tuple[float, list[dict]]] = {}
 _cache_lock = threading.Lock()
 
@@ -84,7 +85,22 @@ def recommendations():
         return jsonify({'error': 'Token de autorización requerido'}), 401
 
     token = auth_header.removeprefix('Bearer ')
+    cache_key = f"recommendations:{token}"
+
+    with _cache_lock:
+        cached = _cache.get(cache_key)
+        if cached is not None:
+            saved_at, data = cached
+            if time.time() - saved_at < RECOMMENDATIONS_TTL_SECONDS:
+                print(f"[cache] HIT  -> recommendations (usuario cacheado)")
+                return jsonify(data)
+
+    print(f"[cache] MISS -> recommendations (calculando...)")
     data = get_recommendations(token)
+
+    with _cache_lock:
+        _cache[cache_key] = (time.time(), data)
+
     return jsonify(data)
 
 
