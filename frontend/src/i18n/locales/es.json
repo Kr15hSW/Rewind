@@ -33,7 +33,9 @@
       "movies": "Películas",
       "series": "Series",
       "books": "Libros",
-      "games": "Juegos"
+      "games": "Juegos",
+      "item": "elemento",
+      "items": "elementos"
     },
     "status": {
       "Pending": "Pendiente",

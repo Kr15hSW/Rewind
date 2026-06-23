@@ -33,7 +33,9 @@
       "movies": "Movies",
       "series": "Series",
       "books": "Books",
-      "games": "Games"
+      "games": "Games",
+      "item": "item",
+      "items": "items"
     },
     "status": {
       "Pending": "Pending",

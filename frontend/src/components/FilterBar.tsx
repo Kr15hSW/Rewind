@@ -82,7 +82,7 @@ export default function FilterBar({ typeFilter, onTypeChange, statusFilter, onSt
 
       {/* Contador */}
       <span style={{ marginLeft: 'auto', color: 'var(--color-text-muted)', fontSize: '0.83rem' }}>
-        {total} {total === 1 ? 'elemento' : 'elementos'}
+        {total} {t(total === 1 ? 'collection.filter.item' : 'collection.filter.items')}
       </span>
     </div>
   )
