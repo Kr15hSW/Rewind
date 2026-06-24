@@ -11,16 +11,26 @@
   --gradient-brand: linear-gradient(135deg, #7C3AED, #3B82F6, #F97316);
 }
 
+[data-theme="light"] {
+  --color-bg: #F5F3FF;
+  --color-surface: #FFFFFF;
+  --color-primary: #7C3AED;
+  --color-accent-blue: #3B82F6;
+  --color-accent-warm: #F97316;
+  --color-text: #1A1830;
+  --color-text-muted: #7B7499;
+  --gradient-brand: linear-gradient(135deg, #7C3AED, #3B82F6, #F97316);
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: system-ui, sans-serif;
 }
 
-/* Esqueleto de carga (SearchPage): pulso suave de opacidad */
 @keyframes skeleton-pulse {
   0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+  50%       { opacity: 1; }
 }
 
 .skeleton-pulse {

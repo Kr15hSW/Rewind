@@ -101,6 +101,35 @@
     "emptyNoScores": "Score some items in your collection to get personalized recommendations.",
     "emptyNoResults": "We couldn't find recommendations matching your taste right now."
   },
+  "profile": {
+  "title": "Profile",
+  "memberSince": "Member since",
+  "editSection": "Edit account",
+  "currentPassword": "Current password",
+  "newPassword": "New password",
+  "saveChanges": "Save changes",
+  "saveSuccess": "Changes saved successfully",
+  "usernameTaken": "Username already in use",
+  "wrongPassword": "Incorrect current password",
+  "updateError": "Could not save changes. Please try again.",
+  "statsSection": "My stats",
+  "totalItems": "items in collection",
+  "completionRate": "completion rate",
+  "avgScore": "average score",
+  "scoreDistribution": "Score distribution",
+  "contentMix": "Content mix",
+  "noStats": "Add and score items to see your stats."
+  },
+  "settings": {
+    "title": "Settings",
+    "themeSection": "Appearance",
+    "darkTheme": "Dark",
+    "lightTheme": "Light",
+    "dangerSection": "Danger zone",
+    "deleteAccount": "Delete my account",
+    "deleteConfirm": "This action is irreversible. All your data will be permanently deleted. Are you sure?",
+    "deleteError": "Could not delete account. Please try again."
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",

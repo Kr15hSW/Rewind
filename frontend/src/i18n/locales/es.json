@@ -101,6 +101,35 @@
     "emptyNoScores": "Puntúa algunos elementos de tu colección para recibir recomendaciones personalizadas.",
     "emptyNoResults": "No hemos encontrado recomendaciones que encajen con tus gustos en este momento."
   },
+  "profile": {
+  "title": "Perfil",
+  "memberSince": "Miembro desde",
+  "editSection": "Editar cuenta",
+  "currentPassword": "Contraseña actual",
+  "newPassword": "Nueva contraseña",
+  "saveChanges": "Guardar cambios",
+  "saveSuccess": "Cambios guardados correctamente",
+  "usernameTaken": "El nombre de usuario ya está en uso",
+  "wrongPassword": "Contraseña actual incorrecta",
+  "updateError": "No se pudieron guardar los cambios. Inténtalo de nuevo.",
+  "statsSection": "Mis estadísticas",
+  "totalItems": "ítems en la colección",
+  "completionRate": "tasa de finalización",
+  "avgScore": "puntuación media",
+  "scoreDistribution": "Distribución de puntuaciones",
+  "contentMix": "Mix de contenido",
+  "noStats": "Añade y puntúa ítems para ver tus estadísticas."
+  },
+  "settings": {
+    "title": "Ajustes",
+    "themeSection": "Apariencia",
+    "darkTheme": "Oscuro",
+    "lightTheme": "Claro",
+    "dangerSection": "Zona de peligro",
+    "deleteAccount": "Eliminar mi cuenta",
+    "deleteConfirm": "Esta acción es irreversible. Todos tus datos serán eliminados permanentemente. ¿Estás seguro?",
+    "deleteError": "No se pudo eliminar la cuenta. Inténtalo de nuevo."
+  },
   "common": {
     "loading": "Cargando...",
     "error": "Ha ocurrido un error",
