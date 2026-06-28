@@ -15,11 +15,18 @@ from fetchers.tmdb import search_movies, search_series
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:5173'])
+
+# CORS - lee orígenes de CORS_ORIGINS
+_cors_origins = [
+    o.strip()
+    for o in os.environ.get('CORS_ORIGINS', 'http://localhost:5173').split(',')
+    if o.strip()
+]
+CORS(app, origins=_cors_origins)
 
 # Caché en memoria
-CACHE_TTL_SECONDS              = 600   # búsquedas: 10 min
-RECOMMENDATIONS_TTL_SECONDS    = 300   # recomendaciones: 5 min
+CACHE_TTL_SECONDS              = 600
+RECOMMENDATIONS_TTL_SECONDS    = 300
 _cache: dict[str, tuple[float, list[dict]]] = {}
 _cache_lock = threading.Lock()
 
@@ -105,4 +112,5 @@ def recommendations():
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
