@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { flushSync } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
-import { register as registerService } from '../services/authService'
+import { register as registerService, login as loginService } from '../services/authService'
 import LanguageToggle from '../components/LanguageToggle'
 
 export default function RegisterPage() {
@@ -23,10 +22,9 @@ export default function RegisterPage() {
     setError('')
     setLoading(true)
     try {
-      const { token } = await registerService({ email, username, password })
-      flushSync(() => {
-        login(token, false)
-      })
+      await registerService({ email, username, password })
+      const { token } = await loginService({ email, password })
+      login(token, false)
       setSuccess(true)
       navigate('/collection')
     } catch {
