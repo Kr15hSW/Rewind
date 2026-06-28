@@ -4,6 +4,7 @@
 **/appsettings.Development.json
 backend/bin/
 backend/obj/
+backend/appsettings.Development.json
 *.user
 .vs/
 
